@@ -1,12 +1,9 @@
-// default headers
-var headers = {
-  "access-control-allow-origin": "*",
-  "access-control-allow-methods": "GET, POST, PUT, DELETE, OPTIONS",
-  "access-control-allow-headers": "content-type, accept",
-  "access-control-max-age": 10, // Seconds.
-  "Content-Type" :"text/plain"   // Tells the client what kind of content we are sending
-}; // ^--You will need to change this if you are sending something
-  // other than plain text, like JSON or HTML.
+var util = require('./utils');
+// messages store
+var messages = {
+  results: [ {username: 'Barnabus', text: 'I like the circus', roomname: 'tent'}]
+};
+
 /*************************************************************
 **************************************************************/
 // Request and Response come from node's http module.
@@ -14,20 +11,24 @@ var headers = {
 // They include information about both the incoming request, such as
 // headers and URL, and about the outgoing response, such as its status
 // and content.
+
 var requestHandler = function(request, response) {
-  
+
   // Do some basic logging.
   console.log("Serving request type " + request.method + " for url " + request.url);
 
+  util.sendResponse(response, messages);
   // The outgoing status.
-  var statusCode = 200;
+  // var statusCode = 200;
+  // // var headers = defaultCorsHeaders;
+  // // headers['Content-Type'] = "JSON";
 
-  // .writeHead() writes to the request line and headers of the response,
-  // which includes the status and all headers.
-  response.writeHead(statusCode, headers);
+  // // .writeHead() writes to the request line and headers of the response,
+  // // which includes the status and all headers.
+  // response.writeHead(statusCode, headers);
 
-  // Make sure to always call response.end() 
-  response.end("Hello, World!");
+  // // Make sure to always call response.end() 
+  // response.end(JSON.stringify(messages));
 
   //- Node may not send anything back to the client until you do. The string you pass to
   // response.end() will be the body of the response - i.e. what shows

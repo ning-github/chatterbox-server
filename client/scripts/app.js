@@ -2,6 +2,7 @@
 // BACKBONE.JS IMPLEMENTATION
 // /////////////////////////////////////////
 var Message = Backbone.Model.extend({
+  // this was previously parse server
   url: 'http://127.0.0.1:3000/classes/chatterbox/',
   defaults: {
     username: 'Santa'
@@ -10,6 +11,7 @@ var Message = Backbone.Model.extend({
 
 var Messages = Backbone.Collection.extend({
   model: Message,
+  // this was previously parse server
   url: 'http://127.0.0.1:3000/classes/chatterbox',
 
   loadMessages: function () {
@@ -73,7 +75,7 @@ var SubmitView = Backbone.View.extend({
     var $text = this.$('#message');
     var $roomname = this.$('#roomname');
     var data = {
-      username: window.location.search.substr(10),
+      username: this.username,
       text: $text.val(),
       roomname: $roomname.val()
     };
