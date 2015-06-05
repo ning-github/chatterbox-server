@@ -31,7 +31,7 @@ server.listen(port, ip);
 //
 // on the command line.
 //
-// To connect to the server, load http://127.0.0.1:3000 in your web
+// To connect to the server, load in your web
 // browser.
 //
 // server.listen() will continue running as long as there is the
