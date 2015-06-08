@@ -46,6 +46,7 @@ var MessageView = Backbone.View.extend({
 
 var MessagesView = Backbone.View.extend({
   initialize: function () {
+    this.collection.loadMessages();
     this.collection.on('sync', this.render, this);
     this.onScreenMessages = {};
   },
