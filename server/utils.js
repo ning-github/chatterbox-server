@@ -17,6 +17,13 @@ exports.sendResponse = function(response, dataObj, statusCode){
 }
 
 // this is for gathering POST data
-exports.collectData = function(){
-
+exports.collectData = function(request, callback){
+  var postData = "";
+  request.on("data", function(chunk){
+    postData+=chunk;
+  });
+  // the callback will act on the string of data once it's fully gathered
+  request.on("end", function(){
+    callback(postData);
+  });
 }

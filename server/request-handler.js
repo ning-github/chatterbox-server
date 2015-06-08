@@ -16,8 +16,18 @@ var requestHandler = function(request, response) {
 
   // Do some basic logging.
   console.log("Serving request type " + request.method + " for url " + request.url);
-
-  util.sendResponse(response, messages);
+  if (request.method === "OPTIONS"){  // handle options by responding normally.
+    util.sendResponse(response, 200);   // following this, it should send that actual request
+  }
+  if (request.method === "GET") {    
+    util.sendResponse(response, messages);
+  }
+  if (request.method === "POST") {
+    util.collectData(request, function(data){
+      messages.results.push(JSON.parse(data)); // updates the the array (needs to be parsed first)
+      util.sendResponse(response, messages, 201);  // writes the response and ends
+    })
+  }
   // The outgoing status.
   // var statusCode = 200;
   // // var headers = defaultCorsHeaders;
