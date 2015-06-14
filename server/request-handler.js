@@ -13,7 +13,6 @@ var messages = {
 // and content.
 
 var requestHandler = function(request, response) {
-
   // Do some basic logging.
   console.log("Serving request type " + request.method + " for url " + request.url);
   if (request.method === "OPTIONS"){  // handle options by responding normally.
