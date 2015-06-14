@@ -1,3 +1,4 @@
+// Model
 var Message = Backbone.Model.extend({
   // this was previously parse server
   url: 'http://127.0.0.1:3000/classes/chatterbox/',
@@ -6,6 +7,7 @@ var Message = Backbone.Model.extend({
   }
 });
 
+// Collection
 var Messages = Backbone.Collection.extend({
   model: Message,
   // this was previously parse server
@@ -26,6 +28,7 @@ var Messages = Backbone.Collection.extend({
   }
 });
 
+// Model View
 var MessageView = Backbone.View.extend({
   model: Message,
 
@@ -41,6 +44,7 @@ var MessageView = Backbone.View.extend({
   }
 });
 
+// Collection View
 var MessagesView = Backbone.View.extend({
   initialize: function () {
     this.collection.loadMessages();
@@ -61,6 +65,8 @@ var MessagesView = Backbone.View.extend({
   }
 });
 
+
+// Form View
 var SubmitView = Backbone.View.extend({
 
   events: {
@@ -77,7 +83,11 @@ var SubmitView = Backbone.View.extend({
       text: $text.val(),
       roomname: $roomname.val()
     };
-    this.collection.create(data);
+    // asynch, so use callback to load messages once creation is complete
+    this.collection.create(data, function(){
+      this.collection.loadMessages();
+    });
+    // clear fields
     $text.val('');
     $roomname.val('');
   },
