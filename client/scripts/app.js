@@ -1,15 +1,16 @@
-// /////////////////////////////////////////
-// BACKBONE.JS IMPLEMENTATION
-// /////////////////////////////////////////
+// Model
 var Message = Backbone.Model.extend({
+  // this was previously parse server
   url: 'http://127.0.0.1:3000/classes/chatterbox/',
   defaults: {
-    username: ''
+    username: 'Santa'
   }
 });
 
+// Collection
 var Messages = Backbone.Collection.extend({
   model: Message,
+  // this was previously parse server
   url: 'http://127.0.0.1:3000/classes/chatterbox',
 
   loadMessages: function () {
@@ -19,9 +20,6 @@ var Messages = Backbone.Collection.extend({
   parse: function (response, options) {
     var output = [];
 
-    // for (var i = response.results.length-1; i>=0; i--) {
-    //   output.push(response.results[i]);
-    // }
     for (var i = 0; i < response.results.length; i++) {
       output.push(response.results[i]);
     };
@@ -30,6 +28,7 @@ var Messages = Backbone.Collection.extend({
   }
 });
 
+// Model View
 var MessageView = Backbone.View.extend({
   model: Message,
 
@@ -45,8 +44,10 @@ var MessageView = Backbone.View.extend({
   }
 });
 
+// Collection View
 var MessagesView = Backbone.View.extend({
   initialize: function () {
+    this.collection.loadMessages();
     this.collection.on('sync', this.render, this);
     this.onScreenMessages = {};
   },
@@ -59,15 +60,13 @@ var MessagesView = Backbone.View.extend({
   },
 
   renderMessage: function(item){
-    // if it's not currently on screen
-    // if (!this.onScreenMessages[item.get('objectId')]){
-    //   this.onScreenMessages[item.get('objectId')] = true;
-      var newMessageView = new MessageView({model:item});
-      this.$el.prepend(newMessageView.render());
-    // }
+    var newMessageView = new MessageView({model:item});
+    this.$el.prepend(newMessageView.render());
   }
 });
 
+
+// Form View
 var SubmitView = Backbone.View.extend({
 
   events: {
@@ -80,11 +79,15 @@ var SubmitView = Backbone.View.extend({
     var $text = this.$('#message');
     var $roomname = this.$('#roomname');
     var data = {
-      username: window.location.search.substr(10),
+      username: this.username,
       text: $text.val(),
       roomname: $roomname.val()
     };
-    this.collection.create(data);
+    // asynch, so use callback to load messages once creation is complete
+    this.collection.create(data, function(){
+      this.collection.loadMessages();
+    });
+    // clear fields
     $text.val('');
     $roomname.val('');
   },
